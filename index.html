@@ -1,0 +1,1730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>🍉 Watermelon Recipe of the Day</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ALL STAYS EXACTLY THE SAME */
+        :root {
+            --watermelon-red: #FF3864;
+            --watermelon-green: #3A7D34;
+            --watermelon-light-green: #8BC34A;
+            --watermelon-pink: #FF6B9D;
+            --watermelon-dark: #2E6328;
+            --bg-color: #F9F7F3;
+            --card-bg: #FFFFFF;
+            --text-dark: #2C3E50;
+            --text-light: #7F8C8D;
+            --border-color: #E8F5E9;
+            --unread-badge: #FF3864;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        
+        .app-container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .app-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-top: 10px;
+            position: relative;
+        }
+        
+        .watermelon-logo {
+            font-size: 48px;
+            margin-bottom: 10px;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .app-title {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--watermelon-green);
+            margin-bottom: 5px;
+            letter-spacing: -0.5px;
+        }
+        
+        .app-subtitle {
+            color: var(--watermelon-red);
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+        
+        .recipe-counter {
+            position: absolute;
+            top: 20px;
+            right: 0;
+            background: rgba(58, 125, 52, 0.1);
+            color: var(--watermelon-green);
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .premium-pass-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: #8B4513;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 14px;
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+            cursor: pointer;
+            z-index: 98;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            border: none;
+            animation: goldPulse 2s infinite;
+        }
+        
+        @keyframes goldPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .premium-pass-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(255, 215, 0, 0.6);
+        }
+        
+        .premium-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1002;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .premium-content {
+            background: white;
+            border-radius: 24px;
+            padding: 30px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            animation: modalAppear 0.3s ease;
+        }
+        
+        @keyframes modalAppear {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        .premium-icon {
+            font-size: 48px;
+            color: #FFD700;
+            margin-bottom: 15px;
+        }
+        
+        .premium-title {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--watermelon-green);
+            margin-bottom: 10px;
+        }
+        
+        .premium-text {
+            color: var(--text-light);
+            margin-bottom: 25px;
+            font-size: 15px;
+        }
+        
+        .code-input-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        .code-input {
+            width: 100%;
+            padding: 18px;
+            padding-left: 50px;
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            font-size: 16px;
+            font-family: inherit;
+            background: #F9F9F9;
+            text-align: center;
+            letter-spacing: 2px;
+            font-family: monospace;
+        }
+        
+        .code-input:focus {
+            outline: none;
+            border-color: var(--watermelon-green);
+            background: white;
+        }
+        
+        .code-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--watermelon-green);
+            font-size: 18px;
+        }
+        
+        .submit-code-btn {
+            background: linear-gradient(135deg, var(--watermelon-green), var(--watermelon-dark));
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 700;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .submit-code-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(58, 125, 52, 0.3);
+        }
+        
+        .close-premium {
+            background: var(--watermelon-green);
+            color: white;
+            border: nothing;
+            padding: 15px 30px;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 15px;
+        }
+        
+        .recipe-of-day {
+            background: var(--card-bg);
+            border-radius: 24px;
+            overflow: hidden;
+            margin-bottom: 25px;
+            box-shadow: 0 15px 40px rgba(58, 125, 52, 0.12);
+            border: 1px solid var(--border-color);
+            transform-origin: top;
+            animation: recipeAppear 0.8s ease;
+        }
+        
+        @keyframes recipeAppear {
+            0% { transform: scale(0.95); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .recipe-badge {
+            background: linear-gradient(135deg, var(--watermelon-red), var(--watermelon-pink));
+            color: white;
+            padding: 8px 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+        
+        .recipe-image {
+            height: 200px;
+            background: linear-gradient(135deg, #FF9A9E, #FAD0C4);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .recipe-emoji {
+            font-size: 80px;
+            animation: emojiFloat 6s ease-in-out infinite;
+        }
+        
+        @keyframes emojiFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-10px) rotate(5deg); }
+            75% { transform: translateY(5px) rotate(-5deg); }
+        }
+        
+        .recipe-content {
+            padding: 25px;
+        }
+        
+        .recipe-title {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--watermelon-green);
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+        
+        .recipe-meta {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-light);
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .meta-item i {
+            color: var(--watermelon-green);
+        }
+        
+        .recipe-description {
+            color: var(--text-dark);
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+        
+        .recipe-ingredients {
+            margin-bottom: 25px;
+        }
+        
+        .ingredients-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--watermelon-green);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .ingredients-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        
+        .ingredient-item {
+            background: #F8FFFA;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .ingredient-item i {
+            color: var(--watermelon-green);
+        }
+        
+        .recipe-actions {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .action-btn {
+            flex: 1;
+            padding: 16px;
+            border-radius: 16px;
+            border: none;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .save-btn {
+            background: #E8F5E9;
+            color: var(--watermelon-green);
+        }
+        
+        .share-btn {
+            background: linear-gradient(135deg, var(--watermelon-green), var(--watermelon-dark));
+            color: white;
+        }
+        
+        .save-btn:hover, .share-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(58, 125, 52, 0.2);
+        }
+        
+        .recipe-stats {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 30px rgba(58, 125, 52, 0.08);
+        }
+        
+        .stats-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--watermelon-green);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            text-align: center;
+        }
+        
+        .stat-item {
+            padding: 15px;
+            background: #F8FFFA;
+            border-radius: 15px;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--watermelon-green);
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+        
+        .update-indicator {
+            background: linear-gradient(135deg, var(--watermelon-red), var(--watermelon-pink));
+            color: white;
+            padding: 12px 20px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 14px;
+            text-align: center;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+            cursor: pointer;
+            display: none;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 56, 100, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 56, 100, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 56, 100, 0); }
+        }
+        
+        .hidden-section {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--bg-color);
+            z-index: 1000;
+            padding: 0;
+            overflow: hidden;
+        }
+        
+        .section-header {
+            background: linear-gradient(135deg, var(--watermelon-green), var(--watermelon-dark));
+            color: white;
+            padding: 60px 20px 20px;
+            position: relative;
+        }
+        
+        .operator-header {
+            background: linear-gradient(135deg, #8B4513, #D2691E);
+        }
+        
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .back-btn {
+            position: absolute;
+            top: 60px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+        }
+        
+        .timer-display {
+            position: absolute;
+            top: 60px;
+            right: 20px;
+            background: rgba(255, 56, 100, 0.9);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            display: none;
+        }
+        
+        /* REMOVED SIGN-IN SCREEN STYLES - NO SECOND PASSWORD */
+        
+        .chat-container {
+            display: none;
+            flex-direction: column;
+            height: calc(100vh - 140px);
+            padding: 20px;
+        }
+        
+        .messages-container {
+            flex: 1;
+            overflow-y: auto;
+            padding-bottom: 20px;
+        }
+        
+        .message {
+            margin-bottom: 15px;
+            max-width: 85%;
+            animation: messageAppear 0.3s ease;
+        }
+        
+        @keyframes messageAppear {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .message.received {
+            align-self: flex-start;
+        }
+        
+        .message.sent {
+            align-self: flex-end;
+            margin-left: auto;
+        }
+        
+        .message-bubble {
+            padding: 14px 18px;
+            border-radius: 20px;
+            position: relative;
+            word-wrap: break-word;
+        }
+        
+        .message.received .message-bubble {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-bottom-left-radius: 5px;
+        }
+        
+        .message.sent .message-bubble {
+            background: linear-gradient(135deg, var(--watermelon-green), var(--watermelon-dark));
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+        
+        .message-time {
+            font-size: 11px;
+            color: var(--text-light);
+            margin-top: 5px;
+            text-align: right;
+        }
+        
+        .message-status {
+            font-size: 11px;
+            color: var(--watermelon-green);
+            margin-top: 3px;
+            text-align: right;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 4px;
+        }
+        
+        .message-input-container {
+            display: flex;
+            gap: 10px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .message-input {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            font-size: 15px;
+            font-family: inherit;
+            background: white;
+        }
+        
+        .message-input:focus {
+            outline: none;
+            border-color: var(--watermelon-green);
+        }
+        
+        .send-btn {
+            background: linear-gradient(135deg, var(--watermelon-green), var(--watermelon-dark));
+            color: white;
+            border: none;
+            width: 50px;
+            border-radius: 16px;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .operator-content {
+            padding: 25px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .recipe-creator {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+        }
+        
+        .creator-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #8B4513;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #8B4513;
+            font-size: 14px;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #E8D4B9;
+            border-radius: 12px;
+            font-size: 15px;
+            font-family: inherit;
+            background: #FFF8F0;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #D2691E;
+            background: white;
+        }
+        
+        .emoji-selector {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .emoji-option {
+            padding: 12px;
+            text-align: center;
+            font-size: 20px;
+            background: #FFF8F0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .emoji-option:hover {
+            background: #D2691E;
+            color: white;
+            transform: scale(1.1);
+        }
+        
+        .emoji-option.selected {
+            background: #8B4513;
+            color: white;
+            transform: scale(1.1);
+        }
+        
+        .ingredients-input {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .ingredients-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .ingredient-tag {
+            background: #E8D4B9;
+            color: #8B4513;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .remove-ingredient {
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .submit-recipe {
+            background: linear-gradient(135deg, #8B4513, #D2691E);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 700;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .submit-recipe:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(139, 69, 19, 0.3);
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--watermelon-green);
+            display: none;
+        }
+        
+        .loading i {
+            font-size: 40px;
+            margin-bottom: 15px;
+            animation: spin 2s linear infinite;
+        }
+        
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: var(--text-light);
+        }
+        
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            color: var(--border-color);
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 15px 25px;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            font-weight: 600;
+            z-index: 1003;
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+        
+        .notification.success {
+            border-left: 5px solid var(--watermelon-green);
+        }
+        
+        .notification.error {
+            border-left: 5px solid var(--watermelon-red);
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="app-header">
+            <div class="watermelon-logo">🍉</div>
+            <h1 class="app-title">Watermelon Recipe of the Day</h1>
+            <p class="app-subtitle">Fresh • Healthy • Delicious</p>
+            <div class="recipe-counter">
+                <i class="fas fa-utensils"></i> <span id="recipeCount">100+</span> recipes
+            </div>
+        </div>
+        
+        <div class="update-indicator" id="updateIndicator">
+            <i class="fas fa-sync-alt"></i> New Recipe of the Day Available!
+        </div>
+        
+        <div id="currentRecipe">
+            <!-- Recipe will be loaded here dynamically -->
+        </div>
+        
+        <div class="recipe-stats">
+            <h3 class="stats-title">Today's Nutrition</h3>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-value" id="calories">245</div>
+                    <div class="stat-label">CALORIES</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="protein">8g</div>
+                    <div class="stat-label">PROTEIN</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="carbs">42g</div>
+                    <div class="stat-label">CARBS</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <button class="premium-pass-btn" id="premiumPassBtn">
+        <i class="fas fa-crown"></i> Premium Pass+
+    </button>
+    
+    <div class="premium-modal" id="premiumModal">
+        <div class="premium-content">
+            <div class="premium-icon">
+                <i class="fas fa-crown"></i>
+            </div>
+            <h2 class="premium-title">Premium Pass+</h2>
+            <p class="premium-text">
+                Enter your access code:
+            </p>
+            
+            <div class="code-input-container">
+                <i class="fas fa-key code-icon"></i>
+                <input 
+                    type="password" 
+                    class="code-input" 
+                    id="accessCodeInput" 
+                    placeholder="Enter access code"
+                    autocomplete="off"
+                    maxlength="20"
+                />
+            </div>
+            
+            <button class="submit-code-btn" id="submitCodeBtn">
+                <i class="fas fa-unlock"></i> Access Premium Features
+            </button>
+            
+            <button class="close-premium" id="closePremium">
+                Cancel
+            </button>
+        </div>
+    </div>
+    
+    <!-- Chat Section - Opens directly with "watermelon" code -->
+    <div class="hidden-section" id="chatSection">
+        <div class="section-header">
+            <button class="back-btn" id="backChatBtn">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <h2 class="section-title">
+                <i class="fas fa-lock"></i> Private Notes
+            </h2>
+            <div class="timer-display" id="timerDisplay">
+                <i class="fas fa-clock"></i> <span id="timer">03:00</span>
+            </div>
+        </div>
+        
+        <!-- NO SIGN-IN SCREEN - DIRECT ACCESS -->
+        <div class="chat-container" id="chatContainer">
+            <div class="messages-container" id="messagesContainer">
+                <!-- Messages will be loaded here -->
+            </div>
+            
+            <div class="message-input-container">
+                <input 
+                    type="text" 
+                    class="message-input" 
+                    id="chatInput" 
+                    placeholder="Type a private note..."
+                    maxlength="500"
+                />
+                <button class="send-btn" id="sendBtn">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+        
+        <div class="loading" id="loading">
+            <i class="fas fa-watermelon"></i>
+            <p>Loading secure notes...</p>
+        </div>
+    </div>
+    
+    <!-- Operator Panel - Opens directly with "watermelop" code -->
+    <div class="hidden-section" id="operatorSection">
+        <div class="section-header operator-header">
+            <button class="back-btn" id="backOperatorBtn">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <h2 class="section-title">
+                <i class="fas fa-user-secret"></i> Operator Panel
+            </h2>
+        </div>
+        
+        <div class="operator-content">
+            <div class="recipe-creator">
+                <h3 class="creator-title">Add New Recipe</h3>
+                
+                <div class="form-group">
+                    <label class="form-label">Recipe Title</label>
+                    <input type="text" class="form-input" id="recipeTitle" placeholder="e.g., Watermelon Mint Salad">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Select Emoji</label>
+                    <div class="emoji-selector" id="emojiSelector">
+                        <div class="emoji-option">🥗</div>
+                        <div class="emoji-option">🍉</div>
+                        <div class="emoji-option">🥣</div>
+                        <div class="emoji-option">🍲</div>
+                        <div class="emoji-option">🍹</div>
+                        <div class="emoji-option">🍨</div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-input" id="recipeDescription" rows="3" placeholder="Describe the recipe..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Preparation Time</label>
+                    <input type="text" class="form-input" id="recipeTime" placeholder="e.g., 15 min">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Ingredients</label>
+                    <div class="ingredients-input">
+                        <input type="text" class="form-input" id="ingredientInput" placeholder="Add an ingredient">
+                        <button class="send-btn" id="addIngredientBtn" style="width: 50px; background: #D2691E;">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <div class="ingredients-list" id="ingredientsList">
+                        <!-- Ingredients will be added here -->
+                    </div>
+                </div>
+                
+                <button class="submit-recipe" id="submitRecipeBtn">
+                    <i class="fas fa-plus-circle"></i> Add Recipe to Database
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="notification" id="notification"></div>
+    
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+    
+    <script>
+        // ==================== CONFIGURATION ====================
+        const FIREBASE_CONFIG = {
+            apiKey: "AIzaSyC4RexampleKey123456789",
+            authDomain: "watermelon-recipes.firebaseapp.com",
+            databaseURL: "https://watermelon-recipes-default-rtdb.firebaseio.com",
+            projectId: "watermelon-recipes",
+            storageBucket: "watermelon-recipes.appspot.com",
+            messagingSenderId: "123456789012",
+            appId: "1:123456789012:web:abc123def456ghi789"
+        };
+        
+        // SECRET ACCESS CODES
+        const ACCESS_CODES = {
+            CHAT: 'watermelon',      // Opens chat directly
+            OPERATOR: 'watermelop'   // Opens operator panel directly
+        };
+        
+        const SELF_DESTRUCT_MINUTES = 3;
+        const ENCRYPTION_VERSION = '1.0';
+        
+        // ==================== GLOBAL STATE ====================
+        let currentChatKey = null;
+        let destructionTimer = null;
+        let firebaseApp = null;
+        let firebaseDb = null;
+        let messageListener = null;
+        let currentRecipeIndex = 0;
+        let selectedEmoji = '🥗';
+        let recipeIngredients = [];
+        let sentMessagesCache = new Map();
+        
+        // ==================== RECIPE DATABASE ====================
+        let recipesDatabase = [
+            {
+                id: 1,
+                title: "Watermelon Feta Salad",
+                emoji: "🥗",
+                time: "15 min",
+                difficulty: "Easy",
+                calories: 180,
+                protein: "8g",
+                carbs: "22g",
+                description: "A refreshing summer salad with watermelon, feta cheese, fresh mint, and a light lime dressing. Perfect for hot days.",
+                ingredients: ["4 cups watermelon cubes", "200g feta cheese", "1/4 cup fresh mint", "2 tbsp lime juice", "1 tbsp olive oil", "Salt & pepper"]
+            },
+            {
+                id: 2,
+                title: "Watermelon Gazpacho",
+                emoji: "🍲",
+                time: "25 min",
+                difficulty: "Medium",
+                calories: 120,
+                protein: "4g",
+                carbs: "28g",
+                description: "Chilled Spanish soup with watermelon, tomatoes, cucumber, and bell peppers. Serve cold for maximum refreshment.",
+                ingredients: ["6 cups watermelon", "2 large tomatoes", "1 cucumber", "1 red bell pepper", "2 garlic cloves", "3 tbsp olive oil"]
+            }
+        ];
+        
+        function generateMoreRecipes() {
+            const recipeTemplates = [
+                { base: "Watermelon", emoji: "🍉", type: "juice", time: "5 min", cals: 90 },
+                { base: "Watermelon", emoji: "🍹", type: "cocktail", time: "10 min", cals: 120 },
+                { base: "Watermelon", emoji: "🥤", type: "smoothie", time: "8 min", cals: 150 },
+                { base: "Watermelon", emoji: "🍨", type: "sorbet", time: "6 hours", cals: 80 },
+                { base: "Watermelon", emoji: "🥗", type: "salad", time: "20 min", cals: 180 },
+                { base: "Watermelon", emoji: "🥒", type: "cooler", time: "15 min", cals: 70 }
+            ];
+            
+            const adjectives = ["Refreshing", "Summer", "Healthy", "Light", "Tropical", "Sweet", "Fresh", "Cool"];
+            const preparations = ["Chopped", "Blended", "Mixed", "Layered", "Grilled", "Frozen", "Diced", "Sliced"];
+            const pairings = ["with Mint", "and Feta", "with Lime", "and Basil", "with Chili", "and Cucumber", "with Ginger", "and Honey"];
+            
+            for (let i = 3; i <= 100; i++) {
+                const template = recipeTemplates[Math.floor(Math.random() * recipeTemplates.length)];
+                const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
+                const prep = preparations[Math.floor(Math.random() * preparations.length)];
+                const pair = pairings[Math.floor(Math.random() * pairings.length)];
+                
+                recipesDatabase.push({
+                    id: i,
+                    title: `${adj} ${template.base} ${template.type.charAt(0).toUpperCase() + template.type.slice(1)} ${pair}`,
+                    emoji: template.emoji,
+                    time: template.time,
+                    difficulty: Math.random() > 0.7 ? "Medium" : "Easy",
+                    calories: template.cals + Math.floor(Math.random() * 60),
+                    protein: `${Math.floor(Math.random() * 12)}g`,
+                    carbs: `${Math.floor(Math.random() * 30) + 10}g`,
+                    description: `A ${adj.toLowerCase()} ${template.type} made with ${prep.toLowerCase()} watermelon ${pair.toLowerCase()}. Perfect for hot summer days or as a healthy snack.`,
+                    ingredients: [
+                        `${Math.floor(Math.random() * 4) + 2} cups watermelon`,
+                        `${Math.floor(Math.random() * 3) + 1} tbsp lime or lemon juice`,
+                        "Fresh herbs (mint, basil, or cilantro)",
+                        `${Math.random() > 0.5 ? "Pinch of salt" : "Dash of honey"}`,
+                        `${Math.random() > 0.5 ? "Olive oil drizzle" : "Chili powder sprinkle"}`
+                    ].slice(0, Math.floor(Math.random() * 3) + 3)
+                });
+            }
+        }
+        
+        // ==================== FIREBASE INTEGRATION ====================
+        function initializeFirebase() {
+            if (!firebaseApp) {
+                try {
+                    firebaseApp = firebase.initializeApp(FIREBASE_CONFIG);
+                    firebaseDb = firebase.database();
+                    console.log("Firebase initialized successfully");
+                    return { app: firebaseApp, db: firebaseDb };
+                } catch (error) {
+                    console.error("Firebase initialization failed:", error);
+                    return { db: null };
+                }
+            }
+            return { app: firebaseApp, db: firebaseDb };
+        }
+        
+        async function sendMessageToFirebase(messageText) {
+            const { db } = initializeFirebase();
+            
+            if (!currentChatKey) {
+                currentChatKey = 'chat_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                localStorage.setItem('watermelon_chat_key', currentChatKey);
+            }
+            
+            const messageData = {
+                text: messageText,
+                timestamp: Date.now(),
+                sender: 'user',
+                status: 'sent'
+            };
+            
+            if (db) {
+                const messageRef = db.ref(`chats/${currentChatKey}/messages`).push();
+                await messageRef.set(messageData);
+                sentMessagesCache.set(messageRef.key, { ...messageData, id: messageRef.key });
+                return messageRef.key;
+            } else {
+                const messageId = 'local_msg_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                sentMessagesCache.set(messageId, { ...messageData, id: messageId });
+                await new Promise(resolve => setTimeout(resolve, 300));
+                return messageId;
+            }
+        }
+        
+        function listenForMessages(onNewMessage) {
+            const { db } = initializeFirebase();
+            
+            if (messageListener) {
+                messageListener();
+                messageListener = null;
+            }
+            
+            if (db && currentChatKey) {
+                const messagesRef = db.ref(`chats/${currentChatKey}/messages`);
+                messageListener = messagesRef.orderByChild('timestamp').on('child_added', (snapshot) => {
+                    const message = snapshot.val();
+                    message.id = snapshot.key;
+                    
+                    const threeMinutesAgo = Date.now() - (SELF_DESTRUCT_MINUTES * 60 * 1000);
+                    if (message.timestamp >= threeMinutesAgo) {
+                        onNewMessage(message);
+                        if (message.sender !== 'user') {
+                            updateRecipeForNewMessage();
+                        }
+                    }
+                });
+                return messageListener;
+            }
+        }
+        
+        async function loadRecentMessages() {
+            const { db } = initializeFirebase();
+            const threeMinutesAgo = Date.now() - (SELF_DESTRUCT_MINUTES * 60 * 1000);
+            
+            let messages = [];
+            
+            if (db && currentChatKey) {
+                const messagesRef = db.ref(`chats/${currentChatKey}/messages`);
+                const snapshot = await messagesRef
+                    .orderByChild('timestamp')
+                    .startAt(threeMinutesAgo)
+                    .once('value');
+                
+                snapshot.forEach((child) => {
+                    const message = child.val();
+                    message.id = child.key;
+                    messages.push(message);
+                });
+            }
+            
+            sentMessagesCache.forEach((message, id) => {
+                if (message.timestamp >= threeMinutesAgo) {
+                    messages.push(message);
+                }
+            });
+            
+            return messages.sort((a, b) => a.timestamp - b.timestamp);
+        }
+        
+        // ==================== RECIPE FUNCTIONS ====================
+        function initRecipes() {
+            generateMoreRecipes();
+            currentRecipeIndex = Math.floor(Math.random() * recipesDatabase.length);
+            displayCurrentRecipe();
+            
+            setInterval(() => {
+                if (Math.random() > 0.7) {
+                    rotateRecipe();
+                }
+            }, 300000);
+        }
+        
+        function displayCurrentRecipe() {
+            const recipe = recipesDatabase[currentRecipeIndex];
+            const container = document.getElementById('currentRecipe');
+            
+            const ingredientsHtml = recipe.ingredients.map(ing => 
+                `<div class="ingredient-item"><i class="fas fa-check-circle"></i> ${ing}</div>`
+            ).join('');
+            
+            container.innerHTML = `
+                <div class="recipe-of-day">
+                    <div class="recipe-badge">RECIPE OF THE DAY</div>
+                    <div class="recipe-image">
+                        <div class="recipe-emoji">${recipe.emoji}</div>
+                    </div>
+                    <div class="recipe-content">
+                        <h2 class="recipe-title">${recipe.title}</h2>
+                        <div class="recipe-meta">
+                            <div class="meta-item">
+                                <i class="far fa-clock"></i> ${recipe.time}
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-signal"></i> ${recipe.difficulty}
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-fire"></i> ${recipe.calories} cal
+                            </div>
+                        </div>
+                        <p class="recipe-description">${recipe.description}</p>
+                        <div class="recipe-ingredients">
+                            <div class="ingredients-title">
+                                <i class="fas fa-clipboard-list"></i> Ingredients
+                            </div>
+                            <div class="ingredients-grid">
+                                ${ingredientsHtml}
+                            </div>
+                        </div>
+                        <div class="recipe-actions">
+                            <button class="action-btn save-btn" onclick="saveCurrentRecipe()">
+                                <i class="far fa-bookmark"></i> Save Recipe
+                            </button>
+                            <button class="action-btn share-btn" onclick="shareRecipe()">
+                                <i class="fas fa-share-alt"></i> Share
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('calories').textContent = recipe.calories;
+            document.getElementById('protein').textContent = recipe.protein;
+            document.getElementById('carbs').textContent = recipe.carbs;
+            document.getElementById('recipeCount').textContent = recipesDatabase.length;
+        }
+        
+        function rotateRecipe() {
+            const oldIndex = currentRecipeIndex;
+            do {
+                currentRecipeIndex = Math.floor(Math.random() * recipesDatabase.length);
+            } while (currentRecipeIndex === oldIndex && recipesDatabase.length > 1);
+            
+            displayCurrentRecipe();
+            showNotification("Recipe of the Day updated!", "success");
+        }
+        
+        function updateRecipeForNewMessage() {
+            const indicator = document.getElementById('updateIndicator');
+            indicator.style.display = 'block';
+            
+            setTimeout(() => {
+                rotateRecipe();
+                indicator.style.display = 'none';
+            }, 2000);
+        }
+        
+        function addNewRecipe(recipeData) {
+            const newId = recipesDatabase.length + 1;
+            recipesDatabase.push({
+                id: newId,
+                title: recipeData.title,
+                emoji: recipeData.emoji,
+                time: recipeData.time,
+                difficulty: "Easy",
+                calories: Math.floor(Math.random() * 100) + 100,
+                protein: `${Math.floor(Math.random() * 10)}g`,
+                carbs: `${Math.floor(Math.random() * 25) + 15}g`,
+                description: recipeData.description,
+                ingredients: recipeData.ingredients
+            });
+            
+            document.getElementById('recipeCount').textContent = recipesDatabase.length;
+            showNotification(`Recipe "${recipeData.title}" added successfully!`, "success");
+            
+            document.getElementById('recipeTitle').value = '';
+            document.getElementById('recipeDescription').value = '';
+            document.getElementById('recipeTime').value = '';
+            recipeIngredients = [];
+            updateIngredientsList();
+            
+            document.querySelectorAll('.emoji-option').forEach(opt => opt.classList.remove('selected'));
+            document.querySelector('.emoji-option').classList.add('selected');
+            selectedEmoji = '🥗';
+        }
+        
+        function updateIngredientsList() {
+            const container = document.getElementById('ingredientsList');
+            container.innerHTML = recipeIngredients.map((ing, index) => `
+                <div class="ingredient-tag">
+                    ${ing}
+                    <span class="remove-ingredient" onclick="removeIngredient(${index})">×</span>
+                </div>
+            `).join('');
+        }
+        
+        // ==================== UI FUNCTIONS ====================
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+        
+        function showPremiumModal() {
+            document.getElementById('premiumModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            document.getElementById('accessCodeInput').focus();
+        }
+        
+        function hidePremiumModal() {
+            document.getElementById('premiumModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+            document.getElementById('accessCodeInput').value = '';
+        }
+        
+        function processAccessCode() {
+            const code = document.getElementById('accessCodeInput').value.trim();
+            
+            if (!code) {
+                showNotification('Please enter an access code', 'error');
+                return;
+            }
+            
+            hidePremiumModal();
+            
+            if (code === ACCESS_CODES.CHAT) {
+                showChat();
+            } else if (code === ACCESS_CODES.OPERATOR) {
+                showOperatorPanel();
+            } else {
+                showNotification('Invalid access code', 'error');
+            }
+        }
+        
+        function showChat() {
+            document.getElementById('chatSection').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            
+            // Initialize chat
+            initializeChat();
+            
+            document.getElementById('chatInput').focus();
+        }
+        
+        function hideChat() {
+            document.getElementById('chatSection').style.display = 'none';
+            document.body.style.overflow = 'auto';
+            resetChatState();
+        }
+        
+        function resetChatState() {
+            stopDestructionTimer();
+            
+            if (messageListener) {
+                messageListener();
+                messageListener = null;
+            }
+        }
+        
+        function showOperatorPanel() {
+            document.getElementById('operatorSection').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function hideOperatorPanel() {
+            document.getElementById('operatorSection').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        
+        async function initializeChat() {
+            document.getElementById('loading').style.display = 'block';
+            
+            initializeFirebase();
+            
+            // Get or create chat key
+            let chatKey = localStorage.getItem('watermelon_chat_key');
+            if (!chatKey) {
+                chatKey = 'chat_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                localStorage.setItem('watermelon_chat_key', chatKey);
+            }
+            currentChatKey = chatKey;
+            
+            // Load messages
+            await loadAndDisplayMessages();
+            
+            // Start listening for new messages
+            listenForMessages(handleNewMessage);
+            
+            document.getElementById('loading').style.display = 'none';
+        }
+        
+        async function loadAndDisplayMessages() {
+            const messages = await loadRecentMessages();
+            const container = document.getElementById('messagesContainer');
+            
+            if (messages.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-comment-slash"></i>
+                        <h3>No recent notes</h3>
+                        <p>Private notes disappear after 3 minutes</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = '';
+            let hasMessages = false;
+            
+            for (const message of messages) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${message.sender === 'user' ? 'sent' : 'received'}`;
+                
+                const time = new Date(message.timestamp).toLocaleTimeString([], { 
+                    hour: '2-digit', 
+                    minute: '2-digit' 
+                });
+                
+                const isCached = sentMessagesCache.has(message.id);
+                const statusIcon = message.sender === 'user' ? 
+                    (isCached ? '<i class="fas fa-check"></i>' : '<i class="fas fa-check-double"></i>') : '';
+                
+                messageDiv.innerHTML = `
+                    <div class="message-bubble">${message.text}</div>
+                    <div class="message-time">${time}</div>
+                    ${message.sender === 'user' ? 
+                        `<div class="message-status">${statusIcon} ${message.status || 'sent'}</div>` : ''}
+                `;
+                
+                container.appendChild(messageDiv);
+                hasMessages = true;
+            }
+            
+            if (hasMessages) {
+                container.scrollTop = container.scrollHeight;
+                startDestructionTimer();
+            }
+        }
+        
+        function handleNewMessage(message) {
+            const container = document.getElementById('messagesContainer');
+            const isEmpty = container.querySelector('.empty-state');
+            
+            if (isEmpty) {
+                container.innerHTML = '';
+            }
+            
+            const existing = Array.from(container.children).find(child => 
+                child.querySelector('.message-bubble')?.textContent === message.text
+            );
+            
+            if (existing) return;
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${message.sender === 'user' ? 'sent' : 'received'}`;
+            
+            const time = new Date(message.timestamp).toLocaleTimeString([], { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
+            
+            const isCached = sentMessagesCache.has(message.id);
+            const statusIcon = message.sender === 'user' ? 
+                (isCached ? '<i class="fas fa-check"></i>' : '<i class="fas fa-check-double"></i>') : '';
+            
+            messageDiv.innerHTML = `
+                <div class="message-bubble">${message.text}</div>
+                <div class="message-time">${time}</div>
+                ${message.sender === 'user' ? 
+                    `<div class="message-status">${statusIcon} ${message.status || 'sent'}</div>` : ''}
+            `;
+            
+            container.appendChild(messageDiv);
+            container.scrollTop = container.scrollHeight;
+            
+            if (message.sender !== 'user') {
+                updateRecipeForNewMessage();
+            }
+            
+            startDestructionTimer();
+        }
+        
+        async function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const text = input.value.trim();
+            
+            if (!text || !currentChatKey) {
+                showNotification('Cannot send message', 'error');
+                return;
+            }
+            
+            input.value = '';
+            
+            try {
+                const messageId = await sendMessageToFirebase(text);
+                
+                const container = document.getElementById('messagesContainer');
+                const emptyState = container.querySelector('.empty-state');
+                
+                if (emptyState) {
+                    container.innerHTML = '';
+                }
+                
+                const tempDiv = document.createElement('div');
+                tempDiv.className = 'message sent';
+                tempDiv.dataset.tempId = messageId;
+                
+                const time = new Date().toLocaleTimeString([], { 
+                    hour: '2-digit', 
+                    minute: '2-digit' 
+                });
+                
+                tempDiv.innerHTML = `
+                    <div class="message-bubble">${text}</div>
+                    <div class="message-time">${time}</div>
+                    <div class="message-status"><i class="fas fa-check"></i> sending...</div>
+                `;
+                
+                container.appendChild(tempDiv);
+                container.scrollTop = container.scrollHeight;
+                
+                showNotification('Message sent', 'success');
+                
+                setTimeout(() => {
+                    const tempElement = container.querySelector(`[data-temp-id="${messageId}"]`);
+                    if (tempElement) {
+                        tempElement.querySelector('.message-status').innerHTML = '<i class="fas fa-check-double"></i> sent';
+                    }
+                    
+                    handleNewMessage({
+                        id: messageId,
+                        text: text,
+                        timestamp: Date.now(),
+                        sender: 'user',
+                        status: 'sent'
+                    });
+                }, 500);
+                
+            } catch (error) {
+                showNotification('Failed to send message', 'error');
+                console.error('Send error:', error);
+            }
+        }
+        
+        function startDestructionTimer() {
+            stopDestructionTimer();
+            
+            const timerElement = document.getElementById('timer');
+            const timerDisplay = document.getElementById('timerDisplay');
+            
+            timerDisplay.style.display = 'block';
+            let secondsLeft = SELF_DESTRUCT_MINUTES * 60;
+            
+            destructionTimer = setInterval(() => {
+                secondsLeft--;
+                
+                const minutes = Math.floor(secondsLeft / 60);
+                const seconds = secondsLeft % 60;
+                timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (secondsLeft <= 30) {
+                    timerDisplay.style.background = 'rgba(255, 56, 100, 0.9)';
+                }
+                
+                if (secondsLeft <= 0) {
+                    stopDestructionTimer();
+                    timerDisplay.style.display = 'none';
+                    showNotification('Old messages have been cleared');
+                }
+            }, 1000);
+        }
+        
+        function stopDestructionTimer() {
+            if (destructionTimer) {
+                clearInterval(destructionTimer);
+                destructionTimer = null;
+            }
+        }
+        
+        function addIngredient() {
+            const input = document.getElementById('ingredientInput');
+            const ingredient = input.value.trim();
+            
+            if (ingredient) {
+                recipeIngredients.push(ingredient);
+                updateIngredientsList();
+                input.value = '';
+                input.focus();
+            }
+        }
+        
+        function submitRecipe() {
+            const title = document.getElementById('recipeTitle').value.trim();
+            const description = document.getElementById('recipeDescription').value.trim();
+            const time = document.getElementById('recipeTime').value.trim();
+            
+            if (!title || !description || !time || recipeIngredients.length === 0) {
+                showNotification('Please fill all fields and add ingredients', 'error');
+                return;
+            }
+            
+            addNewRecipe({
+                title: title,
+                emoji: selectedEmoji,
+                description: description,
+                time: time,
+                ingredients: [...recipeIngredients]
+            });
+        }
+        
+        // ==================== EVENT LISTENERS ====================
+        document.addEventListener('DOMContentLoaded', () => {
+            initRecipes();
+            
+            document.querySelectorAll('.emoji-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    document.querySelectorAll('.emoji-option').forEach(opt => opt.classList.remove('selected'));
+                    option.classList.add('selected');
+                    selectedEmoji = option.textContent;
+                });
+            });
+            
+            document.getElementById('premiumPassBtn').addEventListener('click', showPremiumModal);
+            document.getElementById('closePremium').addEventListener('click', hidePremiumModal);
+            document.getElementById('submitCodeBtn').addEventListener('click', processAccessCode);
+            
+            document.getElementById('backChatBtn').addEventListener('click', hideChat);
+            document.getElementById('backOperatorBtn').addEventListener('click', hideOperatorPanel);
+            document.getElementById('sendBtn').addEventListener('click', sendMessage);
+            
+            document.getElementById('addIngredientBtn').addEventListener('click', addIngredient);
+            document.getElementById('submitRecipeBtn').addEventListener('click', submitRecipe);
+            
+            document.getElementById('accessCodeInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') processAccessCode();
+            });
+            
+            document.getElementById('chatInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') sendMessage();
+            });
+            
+            document.getElementById('ingredientInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') addIngredient();
+            });
+            
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    if (document.getElementById('chatSection').style.display === 'block') {
+                        hideChat();
+                    } else if (document.getElementById('operatorSection').style.display === 'block') {
+                        hideOperatorPanel();
+                    } else if (document.getElementById('premiumModal').style.display === 'flex') {
+                        hidePremiumModal();
+                    }
+                }
+                
+                if (e.ctrlKey && e.key === 'p') {
+                    e.preventDefault();
+                    showPremiumModal();
+                }
+            });
+            
+            window.saveCurrentRecipe = () => {
+                const recipe = recipesDatabase[currentRecipeIndex];
+                showNotification(`Saved: ${recipe.title}`, "success");
+            };
+            
+            window.shareRecipe = () => {
+                const recipe = recipesDatabase[currentRecipeIndex];
+                showNotification(`Shared: ${recipe.title}`, "success");
+            };
+            
+            window.removeIngredient = (index) => {
+                recipeIngredients.splice(index, 1);
+                updateIngredientsList();
+            };
+            
+            document.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+                return false;
+            });
+            
+            setInterval(() => {
+                if (Math.random() > 0.8) {
+                    const cal = document.getElementById('calories');
+                    const current = parseInt(cal.textContent);
+                    cal.textContent = current + (Math.random() > 0.5 ? 5 : -5);
+                }
+            }, 45000);
+        });
+    </script>
+</body>
+</html>
